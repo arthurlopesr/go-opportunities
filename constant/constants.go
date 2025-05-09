@@ -15,4 +15,9 @@ const (
 	ErrToConnectDatabase   = "Failed to connect to SQLite database: %v"
 	ErrAutoMigrateDatabase = "Failed to migrate SQLite database: %v"
 	ErrCreateDatabase      = "Failed to create database directory: %v"
+
+	// ErrCreateOpenings CreateOpenings error
+	ErrCreateOpenings   = "Failed to create opening: "
+	ErrValidateOpenings = "Failed to validate opening: "
+	ErrInvalidJson      = "Invalid JSON format"
 )
