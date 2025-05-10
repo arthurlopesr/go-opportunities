@@ -14,7 +14,7 @@ func SendErrorResponse(ctx *gin.Context, code int, message string) {
 }
 
 func SendSuccessResponse(ctx *gin.Context, op string, code int, data interface{}) {
-	ctx.JSON(http.StatusCreated, gin.H{
+	ctx.JSON(code, gin.H{
 		"statusCode": code,
 		"message":    fmt.Sprintf("Operation successful: %s", op),
 		"data":       data,
