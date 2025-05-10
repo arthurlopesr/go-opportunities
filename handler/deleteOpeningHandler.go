@@ -14,7 +14,7 @@ func DeleteOpeningHandler(ctx *gin.Context) {
 		dto.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-	openingSchema, findOpeningError := findOpening(ctx, openingId)
+	openingSchema, findOpeningError := findOpeningById(ctx, openingId)
 	if findOpeningError != nil {
 		return
 	}
@@ -23,15 +23,6 @@ func DeleteOpeningHandler(ctx *gin.Context) {
 		return
 	}
 	dto.SendSuccessResponse(ctx, "delete-opening", http.StatusOK, openingSchema)
-}
-
-func findOpening(ctx *gin.Context, openingId string) (*schemas.Opening, error) {
-	opening := schemas.Opening{}
-	if err := db.First(&opening, openingId).Error; err != nil {
-		dto.SendErrorResponse(ctx, http.StatusNotFound, fmt.Sprintf("Error: opening with id: %s not found", openingId))
-		return nil, err
-	}
-	return &opening, nil
 }
 
 func deleteOpening(opening *schemas.Opening) error {
