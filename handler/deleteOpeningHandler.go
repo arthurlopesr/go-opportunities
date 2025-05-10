@@ -25,13 +25,6 @@ func DeleteOpeningHandler(ctx *gin.Context) {
 	dto.SendSuccessResponse(ctx, "delete-opening", http.StatusOK, openingSchema)
 }
 
-func validateHasOpeningId(openingId string) error {
-	if openingId == "" {
-		return fmt.Errorf("error: openingId is required")
-	}
-	return nil
-}
-
 func findOpening(ctx *gin.Context, openingId string) (*schemas.Opening, error) {
 	opening := schemas.Opening{}
 	if err := db.First(&opening, openingId).Error; err != nil {
