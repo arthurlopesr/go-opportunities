@@ -47,30 +47,30 @@ func parseAndValidateUpdateRequest(ctx *gin.Context) (*dto.UpdateOpeningRequest,
 	return &request, nil
 }
 
-func updateOpening(opening *schemas.Opening, request *dto.UpdateOpeningRequest, ctx *gin.Context) (openingUpdated *schemas.Opening, err error) {
-	if request.Role != "" {
-		opening.Role = request.Role
+func updateOpening(opening *schemas.Opening, request *dto.UpdateOpeningRequest, ctx *gin.Context) (*schemas.Opening, error) {
+	updateField := func(field interface{}, value interface{}) {
+		switch v := value.(type) {
+		case string:
+			if v != "" {
+				*field.(*string) = v
+			}
+		case *bool:
+			if v != nil {
+				*field.(*bool) = *v
+			}
+		case int64:
+			if v > 0 {
+				*field.(*int64) = v
+			}
+		}
 	}
 
-	if request.Company != "" {
-		opening.Company = request.Company
-	}
-
-	if request.Location != "" {
-		opening.Location = request.Location
-	}
-
-	if request.Remote != nil {
-		opening.Remote = *request.Remote
-	}
-
-	if request.Link != "" {
-		opening.Link = request.Link
-	}
-
-	if request.Salary > 0 {
-		opening.Salary = request.Salary
-	}
+	updateField(&opening.Role, request.Role)
+	updateField(&opening.Company, request.Company)
+	updateField(&opening.Location, request.Location)
+	updateField(&opening.Remote, request.Remote)
+	updateField(&opening.Link, request.Link)
+	updateField(&opening.Salary, request.Salary)
 
 	if err := db.Save(&opening).Error; err != nil {
 		logger.ErrorFormated("error updating opening: %v", err.Error())
